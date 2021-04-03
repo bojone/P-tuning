@@ -1,5 +1,5 @@
 # P-tuning
-P-tuning方法在中文上的简单实验
+P-tuning方法在中文上的简单实验。
 
 ## 方法
 - https://kexue.fm/archives/8295
