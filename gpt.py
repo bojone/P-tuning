@@ -88,7 +88,7 @@ class CrossEntropy(Loss):
         return loss
 
 
-class PturningEmbedding(Embedding):
+class PtuningEmbedding(Embedding):
     """新定义Embedding层，只优化部分Token
     """
     def call(self, inputs, mode='embedding'):
@@ -97,16 +97,16 @@ class PturningEmbedding(Embedding):
         mask = np.zeros((K.int_shape(embeddings)[0], 1))
         mask[1:9] += 1  # 只优化id为1～8的token
         self.embeddings = embeddings * mask + embeddings_sg * (1 - mask)
-        return super(PturningEmbedding, self).call(inputs, mode)
+        return super(PtuningEmbedding, self).call(inputs, mode)
 
 
-class PturningBERT(BERT):
+class PtuningBERT(BERT):
     """替换原来的Embedding
     """
     def apply(self, inputs=None, layer=None, arguments=None, **kwargs):
         if layer is Embedding:
-            layer = PturningEmbedding
-        return super(PturningBERT,
+            layer = PtuningEmbedding
+        return super(PtuningBERT,
                      self).apply(inputs, layer, arguments, **kwargs)
 
 
@@ -114,7 +114,7 @@ class PturningBERT(BERT):
 model = build_transformer_model(
     config_path=config_path,
     checkpoint_path=checkpoint_path,
-    model=PturningBERT,
+    model=PtuningBERT,
     segment_vocab_size=0,  # 去掉segmeng_ids输入
     application='lm',
 )  # 建立模型，加载权重
